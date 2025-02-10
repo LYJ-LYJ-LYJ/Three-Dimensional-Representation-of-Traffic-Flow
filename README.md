@@ -2,7 +2,7 @@
 This script could help teachers(students) from traffic/transportation engineering to teach(understand) the three-dimensional representation of traffic flow in an intuitive way.
 
 
-**Author:** Yinjie Luo (<firstname>.<lastname>@nyu.edu)
+**Author:** Yinjie Luo (&lt;firstname&gt;.&lt;lastname&gt;@nyu.edu)
 
 **Affiliation:** Tandon School of Engineering, New York University
 
