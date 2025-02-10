@@ -17,7 +17,8 @@ This script could help teachers(students) from traffic/transportation engineerin
 **References:**
 
 [1] Makigami, Y., Newell, G. F., & Rothery, R. (1971). Three-dimensional  representation of traffic flow. Transportation Science, 5(3), 302-313.
-[2] Ni, D. (2015). Traffic flow theory: Characteristics, experimental methods, and numerical techniques. Butterworth-Heinemann.  (See Chapter-3---Traffic-Flow-Characteristics-II)
+
+[2] Ni, D. (2015). Traffic flow theory: Characteristics, experimental methods, and numerical techniques. Butterworth-Heinemann. (See Chapter-3---Traffic-Flow-Characteristics-II)
 
 
 **P.S.:** Feel free to email me if you have any questions!
