@@ -22,7 +22,7 @@
 %     methods, and numerical techniques. Butterworth-Heinemann. 
 %     (See Chapter-3---Traffic-Flow-Characteristics-II)
 
-% P.S.: Feel free to email me if you have any questions!
+% P.S.: Feel free to contact me if you have any questions!
 % =========================================================================
 
 
@@ -32,17 +32,24 @@ clc;
 dbstop if error;
 
 
-% Start points on both time (X) and space (Y) axes
-t_starts = [zeros(1, 10), 0, linspace(1, 10, 10)];
-x_starts = [linspace(10, 1, 10), 0, zeros(1, 10)];
+% Vechicles departing from time (X-) and space (Y-) axes
+vehNum_onTime = 10;              % `vehNum_onTime` vehicles from X-axis (time)
+vehNum_onSpace = 10;             % `vehNum_onSpace` vehicles from T-axis (space)
+firstVeh_Pos_onSpace = 10;      % first vechicle from (0, firstVeh_Pos_onSpace)
+laxtVeh_pos_onTime = 10;        % last vehicle from (laxtVeh_pos_onTime, 0)
+t_starts = [zeros(1, vehNum_onSpace+1), 0, linspace(0, laxtVeh_pos_onTime, vehNum_onTime+1)];
+x_starts = [linspace(firstVeh_Pos_onSpace, 0, vehNum_onSpace+1), 0, zeros(1, vehNum_onTime+1)];
+t_starts([vehNum_onSpace+1, vehNum_onSpace+2]) = [];
+x_starts([vehNum_onSpace+1, vehNum_onSpace+2]) = [];
 
-% Number of vehicles/trajectories
-num_vehicles = length(x_starts);
+% Number of vehicles/trajectories 
+% = vehicles on time axis + vehicles on space axis + vehicle from (0,0)
+num_vehicles = vehNum_onTime + vehNum_onSpace + 1;
 
 % Ranges of X, Y, Z axes
 axes_range_extension = 2.0;
-x_max = max(x_starts) + axes_range_extension;
-t_max = max(t_starts) + axes_range_extension;
+x_max = firstVeh_Pos_onSpace + axes_range_extension;
+t_max = laxtVeh_pos_onTime + axes_range_extension;
 N_max = num_vehicles + axes_range_extension;
 
 % Time step
@@ -59,10 +66,10 @@ noise_level = 0.18;
 %   colors = parula(num_vehicles);              % gradient color
 %   colors = jet(num_vehicles);                 % gradient color
 %   colors = ones(num_vehicles, 1) * [0 0 0];   % pure color
-colors = jet(num_vehicles);                 % gradient color
+colors = ones(num_vehicles, 1) * [0 0 0];
 
 % Trajectory visualization
-figure('Name','3D Vehicle Trajectories','Position',[300 300 626 548]);
+figure('Name','3D Vehicle Trajectories','Position',[500 500 626 548]);
 hold on;
 
 Traj(num_vehicles).x = [];      % record each trajectory infomation in a struct
@@ -81,10 +88,13 @@ for vehId = 1:num_vehicles
 
     % Times, as x-axis
     t_vehicle = t_start + 0:delta_t:t_max;
+    if t_vehicle(end) < t_max
+        t_vehicle = [t_vehicle, t_max];
+    end
     
     % Positions, as y-axis
     x_vehicle = x_start + v_speed * (t_vehicle - t_start) + ...
-        noise_level * rand(size((t_vehicle - t_start)));
+        [0, noise_level * rand(1, length((t_vehicle-t_start))-1)];
 
     ii = find(x_vehicle>x_max, 1);
     if ~isempty(ii)
@@ -122,6 +132,7 @@ zlabel('Cumulative number: N(x, t)', 'Color', 'k', 'FontSize', 12);
 
 % View settings
 % camproj('perspective');             % use perspective view
+% view(0,90);                         % 2D bird's eye vie
 view(-65, 24);                      % 3D view
 grid on;
 grid minor;
@@ -130,18 +141,31 @@ box on;
 
 
 %% (1) Observe from the time domain (optional)
-t_obsv = 5.0;                       % in (0, t_max), observe at t = t_obsv
+t_obsv = 4.0;                       % in (0, t_max), observe at t = t_obsv
 color = [1 0 0];                    % mark color
 ObserveFromTimeDomain(t_obsv, color, Traj, x_max);
+% view(-90, 0);                       % view x-N plane (optional)
 
+
+% E.g., Multiple observations (optional)
+% t_obsv = 8.0;                      % in (0, t_max), observe at t = t_obsv
+% color = [1 0 0];                    % mark color
+% ObserveFromTimeDomain(t_obsv, color, Traj, x_max);
+% % view(-90, 0);                       % view x-N plane (optional)
 
 
 
 %% (2) Observe from the space domain (optional)
-x_obsv = 5.2;                       % in (0, x_max), observe at x = x_obsv
+x_obsv = 4.0;                       % in (0, x_max), observe at x = x_obsv
 color = [0 0 1];                    % mark color
 ObserveFromSpaceDomain(x_obsv, color, Traj, t_max);
+% view(0, 0);                         % view v-N plane (optional)
 
+% E.g., Multiple observations (optional)
+% x_obsv = 8.0;                       % in (0, x_max), observe at x = x_obsv
+% color = [0 0 1];                    % mark color
+% ObserveFromSpaceDomain(x_obsv, color, Traj, t_max);
+% % view(0, 0);                         % view v-N plane (optional)
 
 
 
